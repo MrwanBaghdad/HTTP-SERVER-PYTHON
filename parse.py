@@ -17,7 +17,7 @@ def req(arg1):
     get={};
     for i in li:
         try:
-            x=i.split(':',1);
+            x=i.split(':',1); #one maxpart for correct localhost parsing
             get[x[0].strip()]=x[1].strip();
         except IndexError as s:
             if(re.match('GET',i)):
