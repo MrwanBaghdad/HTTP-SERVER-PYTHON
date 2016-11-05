@@ -19,17 +19,17 @@ while(1):
         print('connected by ',addr);
         while True:
             data=conn.recv(1024)
+            conn.shutdown(socket.SHUT_RD);
             # print(parse.req(data.decode()));
             # conn.sendall(b'
-            for i in range(1,3):
-                conn.send(b'heelwo');
-                time.sleep(2);
             
-            conn.shutdown(socket.SHUT_WR);
+            parsed=parse.req(data.decode())
+            print(parsed);
+            with open("/res/"+parsed["url"],mode='r',buffering=1024) as f:
+                conn.sendall(f.read.encode());
             conn.shutdown(socket.SHUT_RDWR);
             # time.sleep(1);
             conn.close();
             print(conn);
             break;
             # server_socekt.close();
-            
