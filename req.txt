@@ -1,0 +1,7 @@
+   GET /?banana=True HTTP/1.1
+    Host: localhost:50008
+    User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.53.11 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+    Accept-Language: en-us
+    Accept-Encoding: gzip, deflate
+    Connection: keep-alive
