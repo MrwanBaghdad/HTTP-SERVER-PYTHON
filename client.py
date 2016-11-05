@@ -29,13 +29,13 @@ s.connect((host,port))
 
 x=1;
 
-spc=' ';
-data= method+spc+file_name+spc+host+spc+str(port);
+#creating string using literals
+data = "%s /%s/ HTTP /1.0 " %(method,file_name) 
 
 s.sendall(data.encode());
 
 
-data='';
+rcvdata='';
 while True:
 
     data=s.recv(1024).decode();
@@ -44,6 +44,12 @@ while True:
         s.shutdown(socket.SHUT_RDWR)
         s.close();
         break;
+    else:
+        rcvdata+=data;
     # time.sleep(2);
-
+if rcvdata != '':
+    f=open("clientres"+file_name, mode='w+')
+    f.write(rcvdata);
+else
+    print("NOTHING")
 
