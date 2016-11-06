@@ -55,3 +55,4 @@ if rcvdata != '':
 else:
     print("NOTHING")
 
+#TODO parse file's contents send gets till complete
