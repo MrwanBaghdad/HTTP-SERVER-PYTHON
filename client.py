@@ -30,7 +30,8 @@ s.connect((host,port))
 x=1;
 
 #creating string using literals
-data = "%s /%s HTTP/1.0 " %(method.upper(),file_name) 
+req_s="%s /%s HTTP/1.0 "
+data = req_s %(method.upper(),file_name) 
 
 s.sendall(data.encode());
 
@@ -52,7 +53,7 @@ if method.upper() == "GET":
 
 def write_to_desk(file_name,buffer):
     with s:
-        with open("clientres/"+file_name,'w+') as file:
+        with open("clientres/"+file_name,mode='w+',buffer=1024) as file:
             data=s.recv().decode();
             file.write(data);
             if data=='':
@@ -63,6 +64,11 @@ def traverse(file_name):
     #TODO parse file's contents send gets till complete
     with open("clientres/"+file_name,'w+') as file:
         x=file.readline();
-        parse.req()
+        parsed=parse.req();
+        url=parsed['url'];
+        
+def get_req(url):
+    s.sendall(req_s % ("GET",url));
 
-
+def post_req(url,data):
+    with 
