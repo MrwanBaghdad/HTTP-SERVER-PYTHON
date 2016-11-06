@@ -1,11 +1,9 @@
-import socket;
-import time;
-import sys;
+import re
+import socket
+import sys
+import time
 from os import mkdir
-
-
-
-
+import parse;
 # method = sys.argv[1] ;
 # file_name= sys.argv[2];
 method="GET"
@@ -38,8 +36,10 @@ s.sendall(data.encode());
 
 
 rcvdata='';
-while True:
 
+if method.upper() == "GET":
+    s.sendall(data.encode())
+    while True:
     data=s.recv(1024).decode();
     print(data);
     if data == '':
@@ -49,10 +49,20 @@ while True:
     else:
         rcvdata+=data;
     # time.sleep(2);
-if rcvdata != '':
-    f=open("clientres/"+file_name, mode='w+')
-    f.write(rcvdata);
-else:
-    print("NOTHING")
 
-#TODO parse file's contents send gets till complete
+def write_to_desk(file_name,buffer):
+    with s:
+        with open("clientres/"+file_name,'w+') as file:
+            data=s.recv().decode();
+            file.write(data);
+            if data=='':
+                s.shutdown(socket.SHUT_RDWR);
+                return;
+
+def traverse(file_name):
+    #TODO parse file's contents send gets till complete
+    with open("clientres/"+file_name,'w+') as file:
+        x=file.readline();
+        parse.req()
+
+
