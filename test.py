@@ -49,4 +49,10 @@
 #         headr_str = "HTTP /1.0 404 NOT FOUND"
 
 
-print("hrrl world");
+def out():
+    with open("res/index.html",buffering=-10) as f:
+        x=f.readline();
+        print(x);
+        return
+
+out()
