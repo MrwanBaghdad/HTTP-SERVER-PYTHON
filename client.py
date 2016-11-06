@@ -51,6 +51,7 @@ if method.upper() == "GET":
         rcvdata+=data;
     # time.sleep(2);
 
+# TODO: get how to pass buffer as argument or don't use one :D
 def write_to_desk(file_name,buffer):
     with s:
         with open("clientres/"+file_name,mode='w+',buffer=1024) as file:
@@ -62,13 +63,25 @@ def write_to_desk(file_name,buffer):
 
 def traverse(file_name):
     #TODO parse file's contents send gets till complete
-    with open("clientres/"+file_name,'w+') as file:
-        x=file.readline();
-        parsed=parse.req();
-        url=parsed['url'];
-        
+    # TODO: recursiion or not recursion
+    url=[];
+    if file_name.endswith('.txt'):
+        # with open("clientres/"+file_name,'w+') as file:
+            x=file.readlines();
+            for l in x:
+                parsed=parse.req(l);
+                url.append(( parsed['method'], parsed['url'] )
+
+
 def get_req(url):
     s.sendall(req_s % ("GET",url));
 
-def post_req(url,data):
-    with 
+def post_req(url,file_name):
+    s.sendall(req_s % ("POST",url));
+    data=s.recv(1024)
+    if !data.upper()=='200 OK':
+        return ConnectionError;
+    with s:
+        with open("clientres/"+url,mode='r',buffering=1024) as f:
+            x=f.read()
+            s.sendall(x.encode())
