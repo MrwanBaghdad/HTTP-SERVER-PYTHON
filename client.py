@@ -6,8 +6,10 @@ from os import mkdir
 
 
 
-method = sys.argv[1];
-file_name= sys.argv[2];
+# method = sys.argv[1] ;
+# file_name= sys.argv[2];
+method="GET"
+file_name= "index.html"
 
 #setting defulats host and port num
 
@@ -30,7 +32,7 @@ s.connect((host,port))
 x=1;
 
 #creating string using literals
-data = "%s /%s/ HTTP/1.0 " %(method,file_name) 
+data = "%s /%s HTTP/1.0 " %(method.upper(),file_name) 
 
 s.sendall(data.encode());
 
