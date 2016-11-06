@@ -30,7 +30,7 @@ s.connect((host,port))
 x=1;
 
 #creating string using literals
-data = "%s /%s/ HTTP /1.0 " %(method,file_name) 
+data = "%s /%s/ HTTP/1.0 " %(method,file_name) 
 
 s.sendall(data.encode());
 
@@ -48,8 +48,8 @@ while True:
         rcvdata+=data;
     # time.sleep(2);
 if rcvdata != '':
-    f=open("clientres"+file_name, mode='w+')
+    f=open("clientres/"+file_name, mode='w+')
     f.write(rcvdata);
-else
+else:
     print("NOTHING")
 
