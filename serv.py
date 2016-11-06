@@ -9,6 +9,7 @@ host=''
 port= 5007
 
 
+
 server_socekt= socket.socket(socket.AF_INET, socket.SOCK_STREAM);
 server_socekt.bind( (host,port) );
 
@@ -25,8 +26,10 @@ while(1):
             
             parsed=parse.req(data.decode())
             print(parsed);
-            with open("/res/"+parsed["url"],mode='r',buffering=1024) as f:
-                conn.sendall(f.read.encode());
+            
+            with open("res"+parsed["url"],mode='r',buffering=1024) as f:
+                conn.sendall(f.read().encode());
+
             conn.shutdown(socket.SHUT_RDWR);
             # time.sleep(1);
             conn.close();
