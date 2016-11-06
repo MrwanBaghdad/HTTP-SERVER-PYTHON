@@ -4,7 +4,7 @@
 # f=open('req.txt',mode='r');
 
 # r= f.readlines();
-x="GET /index/banan.html HTTP/1.1 \n Host: localhost:50008 \n User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.53.11 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10  \n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8  \n Accept-Language: en-us \n Accept-Encoding: gzip, deflate \n Connection: keep-alive"
+# x="GET /index/banan.html HTTP/1.1 \n Host: localhost:50008 \n User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.53.11 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10  \n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8  \n Accept-Language: en-us \n Accept-Encoding: gzip, deflate \n Connection: keep-alive"
 
 import re;
 
@@ -32,4 +32,4 @@ def req(arg1):
     return(get);
 
 
-print(req(x))
+# print(req("get /index.html HTTP/1.0"))

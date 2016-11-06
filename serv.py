@@ -26,7 +26,7 @@ while(1):
             
             parsed=parse.req(data.decode())
             print(parsed);
-            
+            #TODO: catch FileNotFoundError;
             with open("res"+parsed["url"],mode='r',buffering=1024) as f:
                 conn.sendall(f.read().encode());
 
