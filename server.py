@@ -1,49 +1,58 @@
-import socket;
-import re;
-import os;
-import parse;
-import time;
+import os
+import re
+import socket
+import time
 
-
+import parse
+from concurrent.futures import ThreadPoolExecutor
 
 #  TODO: generate a proper http response;
 #  TODO: serving files and closing the connections.
+### HTTP 1.1
 
+HOST = ''
+PORT = 5007
 
+BUFFER_SIZE = 1024
+SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+SERVER_SOCKET.bind((HOST, PORT))
 
-host=''
-port= 5007
+def serve_master(conn):
+	with conn:
+		#TODO async polling till timeout
+		data = conn.recv(BUFFER_SIZE)
+		p = parse.req(data.decode())
+		print(p['method'], p['url'])
+		
+		if p['method'] == "GET":
+			serve_get(conn, p['url'])
+		elif p['method'] == "POST":
+			
+			conn.sendall(b"200 OK")
+			serve_post(conn, p['url'])
 
-index_html = open('res/index.html');
-index_byte=[x.encode() for x in index_html.readlines()];
+def serve_get(conn, url):
+	try:
+		with open("res"+url, mode='rb', buffering=BUFFER_SIZE) as f:
+			conn.send(f.read())
+	except FileNotFoundError as err:
+		conn.sendall(b'404 NOT FOUND')
+		print(err)
+		return
 
-print(index_byte);
+def serve_post(conn, url):
+	with conn:
+		f = open("res"+url, mode='wb+', buffering=BUFFER_SIZE)
+		while 1 :
+			data = conn.recv(BUFFER_SIZE)
+			if data == b"":
+				break
+			f.write(data)
 
-queue= {};
+def welcoming_thread():
+	while 1:
+		SERVER_SOCKET.listen(3)
+		CONN, ADDR = SERVER_SOCKET.accept()
+		executors.submit(serve_master, CONN)
 
-
-server_socekt= socket.socket(socket.AF_INET, socket.SOCK_STREAM);
-server_socekt.bind( (host,port) );
-
-while(1):
-    server_socekt.listen(1);
-    conn,addr=server_socekt.accept();
-    with conn:
-        print('connected by ',addr);
-        while True:
-            data=conn.recv(1024)
-            # print(parse.req(data.decode()));
-            # conn.sendall(b'
-            for byte_line in index_byte:
-                conn.send(byte_line );
-            conn.close();
-            time.sleep(3);
-            server_socekt.close();
-
-            break;
-            # else:
-            #     print(data.decode());
-            #     conn.sendall(data);
-            
-            if not data:break;
-            conn.sendall(b'200 ok');
+executors = ThreadPoolExecutor(max_workers=3)
