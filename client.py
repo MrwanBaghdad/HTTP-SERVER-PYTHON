@@ -6,14 +6,24 @@ from os import mkdir
 import parse;
 
 
+# def write_to_desk(file_name):
+# 	with open("clientres/"+url, mode='wb+', buffering=BUFFER_SIZE) as file:
+# 		with s:
+# 			# FIXME: one byte then file is closed / while is infinity
+# 			file.write(s.recv(BUFFER_SIZE));
+# 			if s.recv(BUFFER_SIZE) == '':
+# 				return;
+
+
 def write_to_desk(file_name):
 	with s:
-		with open("clientres/"+url, mode='wb+', buffering=BUFFER_SIZE) as file:
-			# FIXME: one byte then file is closed / while is infinity
-			while 1:
-				file.write(s.recv(BUFFER_SIZE));
-				if s.recv(BUFFER_SIZE) == '':
-					return;
+		f=open("clientres/"+url, mode='wb+', buffering=BUFFER_SIZE);
+		while 1:
+			data =s.recv(BUFFER_SIZE)
+			if data == b"":
+				break
+			f.write(data)
+
 
 def traverse(file_name):
 	#TODO parse file's contents send gets till complete
