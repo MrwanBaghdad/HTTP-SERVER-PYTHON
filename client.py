@@ -70,7 +70,7 @@ def traverse(file_name):
             x=file.readlines();
             for l in x:
                 parsed=parse.req(l);
-                url.append(( parsed['method'], parsed['url'] )
+                url.append(( parsed['method'], parsed['url'] ))
 
 
 def get_req(url):
