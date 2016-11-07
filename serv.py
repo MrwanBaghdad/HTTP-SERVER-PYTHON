@@ -1,6 +1,7 @@
 import os
 import re
 import socket
+import threading
 import time
 
 import parse
@@ -47,6 +48,7 @@ def serve_master(conn):
 	if p['method'] == "GET":
 		serve_get(conn, p['url'])
 	elif p['method'] == "POST":
+		
 		conn.sendall(b"200 OK")
 		serve_post(conn, p['url'])
 
@@ -59,6 +61,8 @@ def welcoming_thread():
 
 #TODO: threading
 executors = ThreadPoolExecutor(max_workers=3)
+writing_lock = threading.Lock()
+
 
 # while 1:
 # 	SERVER_SOCKET.listen(1)
