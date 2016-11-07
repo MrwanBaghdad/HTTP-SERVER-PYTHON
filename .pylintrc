@@ -1,0 +1,5 @@
+[MASTER]
+disable=I,W,C
+enable=C0326
+[MESSAGES CONTROL]
+
