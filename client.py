@@ -42,15 +42,22 @@ def get_req(url):
 	byt = byt.encode()
 	s.sendall(byt)
 
-def post_req(url,file_name):
-	s.sendall(req_s % ("POST",url));
-	data=s.recv(BUFFER_SIZE)
-	if data.upper()!='200 OK':
+def post_req(url):
+	byt = req_s % ("POST",url)
+	byt = byt.encode()
+	s.sendall(byt)
+	data = s.recv(BUFFER_SIZE)
+
+	if data.upper()!=b'200 OK':
 		return ConnectionError;
 	with s:
-		with open("clientres/"+file_name,mode='r',buffering=1024) as f:
-			x = f.read()
-			s.send(x.encode())
+		try:
+			with open("clientres/"+url, mode='rb',buffering=1024) as f:
+				 s.send(f.read())
+		except FileNotFoundError as err:
+			s.sendall(b'404 NOT FOUND')
+			print(err)
+			return
 
 
 
@@ -101,7 +108,7 @@ if method.upper() == "GET":
 	write_to_desk(url)
 elif method.upper() =="POST":
 	try:
-		post_req(url,file_name)
+		post_req(url)
 	except ConnectionError as c_err:
 		exit(c_err)
 	
