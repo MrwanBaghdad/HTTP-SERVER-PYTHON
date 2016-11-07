@@ -8,7 +8,7 @@ HOST = ''
 PORT = 5007
 
 
-
+BUFFER_SIZE = 1024
 SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 SERVER_SOCKET.bind((HOST, PORT))
 
@@ -18,7 +18,7 @@ while 1:
     with CONN:
         print('connected by ', ADDR)
         while True:
-            data = CONN.recv(1024)
+            data = CONN.recv(BUFFER_SIZE)
             CONN.shutdown(socket.SHUT_RD)
             # print(parse.req(data.decode()));
             # CONN.sendall(b'
@@ -27,7 +27,7 @@ while 1:
             print(parsed)
 
     # TODO : catch FileNotFoundError
-            with open("res"+parsed["url"], mode='r', buffering=1024) as f:
+            with open("res"+parsed["url"], mode='r', buffering=BUFFER_SIZE) as f:
                 CONN.sendall(f.read().encode())
 
             CONN.shutdown(socket.SHUT_RDWR)
@@ -40,7 +40,7 @@ while 1:
 def serve_get(conn, url):
     with conn:
         try:
-            with open(url, mode='r', buffering=1024) as f:
+            with open(url, mode='r', buffering=BUFFER_SIZE) as f:
                 x = f.read()
                 conn.send(x.encode())
         except FileNotFoundError as err:
@@ -48,18 +48,28 @@ def serve_get(conn, url):
             print(err)
             return
 
-# FIXME: change 1024 to buffer_size 
+
 def serve_post(conn, url):
     with conn:
-        with open(url, mode='w+', buffering=1024) as f:
-            data = conn.recv(1024)
+        with open(url, mode='w+', buffering=BUFFER_SIZE) as f:
+            data = conn.recv(BUFFER_SIZE)
             data = data.decode()
             f.write(data)
 
-def serve_master(conn, data):
-    p = parse.req(data.decode());
+def serve_master(conn):
+    data = conn.recv(BUFFER_SIZE)
+    p = parse.req(data.decode())
     if p['method'] == "GET":
-        serve_get(conn, p['url']);
+        serve_get(conn, p['url'])
     elif p['method'] == "POST":
-        conn.sendall(b"200 OK");
+        conn.sendall(b"200 OK")
         serve_post(conn, p['url'])
+
+from concurrent.futures import ThreadPoolExecutor
+executors = ThreadPoolExecutor(max_workers=3)
+
+def welcoming_thread():
+    while 1:
+        SERVER_SOCKET.listen(3)
+        CONN, ADDR = SERVER_SOCKET.accept()
+        executors.submit(serve_master, CONN)
