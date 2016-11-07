@@ -25,11 +25,19 @@ def serve_get(conn, url):
 			return
 
 
+# def serve_post(conn, url):
+# 	with conn:
+# 		with open(url, mode='wb+', buffering=BUFFER_SIZE) as f:
+# 			data = conn.recv(BUFFER_SIZE)
+# 			f.write(data)
+
 def serve_post(conn, url):
 	with conn:
-		with open(url, mode='w+', buffering=BUFFER_SIZE) as f:
+		f = open("res"+url, mode='wb+', buffering=BUFFER_SIZE)
+		while 1 :
 			data = conn.recv(BUFFER_SIZE)
-			data = data.decode()
+			if data == b"":
+				break
 			f.write(data)
 
 def serve_master(conn):
