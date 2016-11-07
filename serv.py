@@ -43,6 +43,7 @@ def serve_post(conn, url):
 def serve_master(conn):
 	data = conn.recv(BUFFER_SIZE)
 	p = parse.req(data.decode())
+	print(p['method'], p['url'])
 	if p['method'] == "GET":
 		serve_get(conn, p['url'])
 	elif p['method'] == "POST":
@@ -59,33 +60,15 @@ def welcoming_thread():
 #TODO: threading
 executors = ThreadPoolExecutor(max_workers=3)
 
-while 1:
-	SERVER_SOCKET.listen(1)
-	CONN, ADDR = SERVER_SOCKET.accept()
-	with CONN:
-		print('connected by ', ADDR)
-		while True:
-			# data = CONN.recv(BUFFER_SIZE)
-			# # CONN.shutdown(socket.SHUT_RD)
-			# # print(parse.req(data.decode()));
-			# # CONN.sendall(b'
+# while 1:
+# 	SERVER_SOCKET.listen(1)
+# 	CONN, ADDR = SERVER_SOCKET.accept()
+# 	with CONN:
+# 		print('connected by ', ADDR)
+# 		while True:
+# 			serve_master(CONN);
+# 			print(CONN)
+# 			break
 
-			# parsed = parse.req(data.decode())
-			# print(parsed['url'])
 
-			serve_master(CONN);
-			
-			# try:
-			# 	with open("res"+parsed["url"], mode='rb', buffering=BUFFER_SIZE) as f:
-			# 		CONN.send(f.read())
-					
-			# except FileNotFoundError as f_err:
-			# 	pass
-			
-			# CONN.shutdown(socket.SHUT_RDWR)
-			# # time.sleep(1);
-			# CONN.close()
-			print(CONN)
-			break
-			# SERVER_SOCKET.close();
-
+welcoming_thread()
