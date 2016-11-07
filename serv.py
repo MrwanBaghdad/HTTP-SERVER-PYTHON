@@ -36,3 +36,29 @@ while(1):
             print(conn);
             break;
             # server_socekt.close();
+
+def serve_get(conn,url):
+    with conn:
+        try:
+            with open(url,mode='r',buffering=1024) as f:
+                x=f.read()
+                conn.send(x.encode())
+        except FileNotFoundError as err:
+            conn.sendall(b'404 NOT FOUND')
+            return
+
+# TODO: change 1024 to buffer_size
+def serve_post(conn,url):
+    with conn:
+        with open(url,mode='w+',buffering=1024) as f:
+            data=conn.recv(1024);
+            data=data.decode();
+            f.write(data);
+
+def serve_master(conn,data):
+    p= parse.req(data.decode());
+    if p['method'] == "GET":
+        serve_get(p['url']);
+    else if p['method']=="POST":
+        conn.sendall(b"200 OK");
+        serve_post(conn,p['url'])
