@@ -18,9 +18,11 @@ SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 SERVER_SOCKET.bind((HOST, PORT))
 
 def serve_master(conn):
-	with conn:
+	conn.settimeout(3)
+	while True:
 		#TODO async polling till timeout
 		data = conn.recv(BUFFER_SIZE)
+		print(data)
 		p = parse.req(data.decode())
 		print(p['method'], p['url'])
 		
@@ -51,9 +53,11 @@ def serve_post(conn, url):
 
 def welcoming_thread():
 	while 1:
-		SERVER_SOCKET.listen(3)
+		SERVER_SOCKET.listen(1)
 		CONN, ADDR = SERVER_SOCKET.accept()
-		CONN.settimeout(2)
+		
 		executors.submit(serve_master, CONN)
 
 executors = ThreadPoolExecutor(max_workers=3)
+
+welcoming_thread()
