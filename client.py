@@ -17,10 +17,11 @@ import parse;
 
 def write_to_desk(file_name):
 	with s:
-		f=open("clientres/"+url, mode='wb+', buffering=BUFFER_SIZE);
+		f=open("clientres/"+file_name, mode='wb+', buffering=BUFFER_SIZE);
 		while 1:
 			data =s.recv(BUFFER_SIZE)
 			if data == b"":
+				traverse(file_name)
 				break
 			f.write(data)
 
@@ -30,11 +31,25 @@ def traverse(file_name):
 	# TODO: recursiion or not recursion
 	url=[];
 	if file_name.endswith('.txt'):
-		# with open("clientres/"+file_name,'w+') as file:
-			x = file_name.readlines();
+		with open("clientres/"+file_name,'r') as file:
+			x = file.readlines();
 			for l in x:
 				parsed=parse.req(l);
-				url.append(( parsed['method'], parsed['url'] ))
+				try:
+					url.append(( parsed['method'], parsed['url'] ))
+				except IndexError as i_err:
+					pass
+			for u in url:
+				try:
+					if u[0].upper() == "GET":
+						get_req(l[1])
+						write_to_desk(l[1])
+					elif u[0].upper() == "POST":
+						post_req(l[1])
+					else:
+						continue
+				except IndexError as i_err:
+					pass
 
 
 def get_req(url):
