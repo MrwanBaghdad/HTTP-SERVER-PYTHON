@@ -53,11 +53,11 @@ def serve_post(conn, url):
 
 def welcoming_thread():
 	while 1:
-		SERVER_SOCKET.listen(1)
+		SERVER_SOCKET.listen(MAX_CONNECTIONS)
 		CONN, ADDR = SERVER_SOCKET.accept()
 		
 		executors.submit(serve_master, CONN)
 
-executors = ThreadPoolExecutor(max_workers=3)
-
+MAX_CONNECTIONS = 3
+executors = ThreadPoolExecutor(max_workers=MAX_CONNECTIONS)
 welcoming_thread()
