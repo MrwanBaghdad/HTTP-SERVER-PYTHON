@@ -36,7 +36,7 @@ def traverse(file_name):
 			for l in x:
 				parsed=parse.req(l);
 				try:
-					url.append(( parsed['method'], parsed['url'] ))
+					url.append((parsed['method'], parsed['url']))
 				except IndexError as i_err:
 					pass
 			for u in url:
@@ -53,11 +53,13 @@ def traverse(file_name):
 
 
 def get_req(url):
+	s.connect(host,port)
 	byt = req_s % ("GET", url)
 	byt = byt.encode()
 	s.sendall(byt)
 
 def post_req(url):
+	s.connect(host,port)
 	byt = req_s % ("POST",url)
 	byt = byt.encode()
 	s.sendall(byt)
